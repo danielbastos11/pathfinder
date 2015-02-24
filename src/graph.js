@@ -68,7 +68,7 @@ define(
 
 			// Perform insertion
 			this.adjacencyMatrix[vertex1Index][vertex2Index]++;
-
+			console.log( vertex1Index +  '/' + vertex2Index);
 			if( !this.isDirected ){
 				this.adjacencyMatrix[vertex2Index][vertex1Index]++;
 			}
@@ -102,6 +102,7 @@ define(
             return this.adjacencyMatrix[vertexIndex].filter(function(element){
 				return ( element > 0 );
 			});
+		}
 
 		/**
 		 * Returns the cost of the edge between two verices,

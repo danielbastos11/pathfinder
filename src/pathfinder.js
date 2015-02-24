@@ -1,8 +1,12 @@
 define(
     [
-
+        'lib/priorityQueue'
     ],
     function( PriorityQueue ){
+        var comparator = function( obj1, obj2 ){
+            return obj1.priority - obj2.priority;
+        };
+
         // Cria Classe Singleton
         var PathFinder = {};
 
@@ -17,20 +21,33 @@ define(
 
         PathFinder.aStar = function( graph, initialSpot ){
             // Seta as variáveis
-            var frontier = new PriorityQueue();
+            var frontier = new PriorityQueue( comparator );
             var originOf = {};
             var costTo = {};
+            var goal;
 
             // Seta os valores pro ponto inicial
             originOf[initialSpot] = null;
             costTo[initialSpot] = 0;
 
+            frontier.put({
+                priority: 0,
+                obj: initialSpot
+            });
+
             // Algoritmo em si
-            while( frontier.size() === 0 ){
-                var current = frontier.get();
-                if( current.isGoal() ) break;
+            while( frontier.size() !== 0 ){
+                var current = frontier.get().obj;
+                if( current.isGoal ){
+                    goal = current;
+                    break;
+                }
 
                 var adjacents = graph.getAdjacentsOf( current );
+
+                console.log( graph );
+                console.log( current );
+
                 adjacents.forEach(function( next ){
                     var newCost = costTo[current] + graph.cost( current, next );
 
@@ -39,7 +56,10 @@ define(
                         originOf[next] = newCost;
 
                         var priority = newCost + heuristic( next, goal );
-                        frontier.put( next, priority );
+                        frontier.put({
+                            priority: priority,
+                            obj: next
+                        });
                     }
                 });
             }
@@ -47,11 +67,7 @@ define(
             // Monta o caminho
             var path = [];
             var temp = goal;
-
-            while( temp !== null ){
-                path.unshift( temp );
-                temp = originOf[temp];
-            }
+            console.log( goal );
 
             return path;
         };

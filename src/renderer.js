@@ -7,8 +7,8 @@ define(
         var newline = '\n';
         function isValidPosition( row, col, array){
             var isNot0 = ( row > 0 && col > 0 );
-            var rowExists = ( row < posTracker.length );
-            var colExists = ( col < posTracker[row].length );
+            var rowExists = ( row < array.length );
+            var colExists = ( col < array[row].length);
 
             return isNot0 && rowExists && colExists;
         }
@@ -27,7 +27,7 @@ define(
             '1': 'wall',
             '2': 'start',
             '3': 'exit'
-        }
+        };
 
         Renderer.prototype.render = function( grid ){
             var graph = new Graph();
@@ -42,16 +42,16 @@ define(
 
                 // Detecta nova linha
                 if(char === newline){
-                    rowCount += 1
+                    rowCount += 1;
                     colCount = 0;
                     posTracker.push( new Array() );
 
                     continue;
                 }
 
-                // Cria e guarda objeto no array e no grafo
                 var type = this.types[char];
 
+                // Cria e guarda objeto no array e no grafo
                 var isGoal = (type == 'exit');
                 var newObject = {
                     type: type,
@@ -61,8 +61,13 @@ define(
                 };
 
                 posTracker[rowCount].push( newObject );
-                graph.insertVertex( newObject );
                 colCount++;
+
+                // Não inserir nada pra quem não for caminhável
+                if( !isWalkable( type )) continue;
+
+                graph.insertVertex( newObject );
+
 
                 // Detecta ponto de início
                 if( type == 'start' ){
@@ -70,9 +75,10 @@ define(
                 }
 
                 // Insere arestas no grafo
-                for( var row = rowCount - 1; row <= rowCount; row++){
-                    for( var col = colCount; col <= colCount + 1; col++){
-
+                var row = ( rowCount == 0 ? 0 : rowCount - 1 );
+                var col = ( colCount == 0 ? 0 : colCount - 1 );
+                for( ; row <= rowCount; row++){
+                    for( ; col <= colCount + 1; col++){
                         if( isValidPosition( row, col, posTracker ) ){
                             var neighboor = posTracker[row][col];
                             if( isWalkable( neighboor.type ) ){
@@ -88,8 +94,13 @@ define(
                 initial: initial,
                 array: posTracker
             };
-        }
-    }
+        };
 
     return new Renderer();
-);
+    /*
+1111
+1201
+1101
+1131
+    */
+});
