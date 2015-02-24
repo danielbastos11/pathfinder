@@ -6,11 +6,11 @@ define(
         // Helpers
         var newline = '\n';
         function isValidPosition( row, col, array){
-            var isNot0 = ( row > 0 && col > 0 );
+            var isNotInvalid = ( row >= 0 && col >= 0 );
             var rowExists = ( row < array.length );
             var colExists = ( col < array[row].length);
 
-            return isNot0 && rowExists && colExists;
+            return isNotInvalid && rowExists && colExists;
         }
 
         function isWalkable( type ){
@@ -61,7 +61,6 @@ define(
                 };
 
                 posTracker[rowCount].push( newObject );
-                colCount++;
 
                 // Não inserir nada pra quem não for caminhável
                 if( isWalkable( type )){
@@ -78,16 +77,21 @@ define(
                     var initCol = ( colCount == 0 ? 0 : colCount - 1 );
                     for( var row = initRow; row <= rowCount; row++){
                         for( var col = initCol ; col <= colCount + 1; col++){
+
                             if( isValidPosition( row, col, posTracker ) ){
 
                                 var neighboor = posTracker[row][col];
                                 if( isWalkable( neighboor.type ) && neighboor != newObject ){
                                     graph.insertEdge( newObject, neighboor );
                                 }
+
                             }
+
                         }
                     }
                 }
+
+                colCount ++;
             }
 
             return {
