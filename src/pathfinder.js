@@ -20,7 +20,6 @@ define(
         }
 
         PathFinder.aStar = function( graph, initialSpot, goal ){
-            console.log( goal );
             // Seta as variáveis
             var frontier = new PriorityQueue( comparator );
             var originOf = {};
@@ -48,9 +47,11 @@ define(
                 adjacents.forEach(function( next ){
                     var newCost = costTo[current] + graph.cost( current, next );
 
-                    if( !costTo[next] || costTo[next] > newCost ){
+                    if( next != initialSpot &&
+                        !costTo[next] || costTo[next] > newCost ){
+
                         costTo[next] = newCost;
-                        originOf[next] = newCost;
+                        originOf[next] = current;
 
                         var priority = newCost + heuristic( next, goal );
                         frontier.put({
@@ -64,7 +65,12 @@ define(
             // Monta o caminho
             var path = [];
             var temp = goal;
-            console.log( goal );
+            console.log( originOf );
+
+            while( temp ){
+                path.unshift( temp );
+                temp = originOf[ temp ];
+            }
 
             return path;
         };
