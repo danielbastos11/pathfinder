@@ -1,7 +1,8 @@
 head.load(
 	[
 		'lib/require.js',
-		'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
+		'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js',
+		'lib/flexibleArea.js'
 	],
 	function(){
 		require.config({
@@ -18,6 +19,8 @@ head.load(
 			],
 			function( Renderer, PathFinder ){
 				$(document).ready(function(){
+					$('#input').flexible();
+
 					$('#go').click(function(){
 						var input = $('#input').val();
 						var maze = Renderer.render( input );
@@ -59,7 +62,7 @@ head.load(
 							output += '<br />';
 						});
 
-						$('#output').append( output );
+						$('#output').html( output );
 
 					})
 				})

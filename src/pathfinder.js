@@ -10,13 +10,26 @@ define(
         // Cria Classe Singleton
         var PathFinder = {};
 
-        var heuristic = function( origin, destination ){
-            var x1 = origin.row;
-            var y1 = origin.col;
-            var x2 = destination.row;
-            var y2 = destination.col;
+        var heuristic = function( origin, goal ){
+            var result;
 
-            return Math.abs( x1 - x2 ) + Math.abs( y1 - y2 );
+            goal.forEach(function( destination ){
+                var x1 = origin.row;
+                var y1 = origin.col;
+                var x2 = destination.row;
+                var y2 = destination.col;
+
+                var candidate =  Math.abs( x1 - x2 ) + Math.abs( y1 - y2 );
+
+                if( !result ){
+                    result = candidate;
+                }
+                else {
+                    result = Math.min( candidate, result );
+                }
+            })
+
+            return result;
         }
 
         PathFinder.aStar = function( graph, initialSpot, goal ){
@@ -24,6 +37,7 @@ define(
             var frontier = new PriorityQueue( comparator );
             var originOf = {};
             var costTo = {};
+            var final;
 
             // Seta os valores pro ponto inicial
             originOf[initialSpot] = null;
@@ -37,8 +51,8 @@ define(
             // Algoritmo em si
             while( frontier.size() !== 0 ){
                 var current = frontier.get().obj;
-                if( current.isGoal ){
-                    goal = current;
+                if( goal.indexOf( current ) !== -1 ){
+                    final = current;
                     break;
                 }
 
@@ -64,8 +78,7 @@ define(
 
             // Monta o caminho
             var path = [];
-            var temp = goal;
-            console.log( originOf );
+            var temp = final;
 
             while( temp ){
                 path.unshift( temp );

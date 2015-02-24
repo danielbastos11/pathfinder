@@ -32,7 +32,7 @@ define(
 
         Renderer.prototype.render = function( grid ){
             var graph = new Graph();
-            var initial, goal;
+            var initial, goal = [];
 
             var rowCount = 0;
             var colCount = 0;
@@ -73,7 +73,7 @@ define(
                     }
 
                     if( type == 'exit' ){
-                        goal = newObject;
+                        goal.push( newObject );
                     }
 
                     // Insere arestas no grafo
