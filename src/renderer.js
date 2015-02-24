@@ -64,25 +64,26 @@ define(
                 colCount++;
 
                 // Não inserir nada pra quem não for caminhável
-                if( !isWalkable( type )) continue;
+                if( isWalkable( type )){
+                    graph.insertVertex( newObject );
 
-                graph.insertVertex( newObject );
 
+                    // Detecta ponto de início
+                    if( type == 'start' ){
+                        initial = newObject;
+                    }
 
-                // Detecta ponto de início
-                if( type == 'start' ){
-                    initial = newObject;
-                }
+                    // Insere arestas no grafo
+                    var initRow = ( rowCount == 0 ? 0 : rowCount - 1 );
+                    var initCol = ( colCount == 0 ? 0 : colCount - 1 );
+                    for( var row = initRow; row <= rowCount; row++){
+                        for( var col = initCol ; col <= colCount + 1; col++){
+                            if( isValidPosition( row, col, posTracker ) ){
 
-                // Insere arestas no grafo
-                var row = ( rowCount == 0 ? 0 : rowCount - 1 );
-                var col = ( colCount == 0 ? 0 : colCount - 1 );
-                for( ; row <= rowCount; row++){
-                    for( ; col <= colCount + 1; col++){
-                        if( isValidPosition( row, col, posTracker ) ){
-                            var neighboor = posTracker[row][col];
-                            if( isWalkable( neighboor.type ) ){
-                                graph.insertEdge( newObject, neighboor );
+                                var neighboor = posTracker[row][col];
+                                if( isWalkable( neighboor.type ) && neighboor != newObject ){
+                                    graph.insertEdge( newObject, neighboor );
+                                }
                             }
                         }
                     }
