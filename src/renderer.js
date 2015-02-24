@@ -1,8 +1,9 @@
 define(
     [
-        'src/graph.js'
+        'src/graph',
+        './node'
     ],
-    function( Graph ){
+    function( Graph, Node ){
         // Helpers
         var newline = '\n';
         function isValidPosition( row, col, array){
@@ -53,12 +54,11 @@ define(
 
                 // Cria e guarda objeto no array e no grafo
                 var isGoal = (type == 'exit');
-                var newObject = {
+                var newObject = new Node({
                     type: type,
                     row: rowCount,
-                    col: colCount,
-                    isGoal: isGoal
-                };
+                    col: colCount
+                });
 
                 posTracker[rowCount].push( newObject );
 
@@ -77,20 +77,23 @@ define(
                     }
 
                     // Insere arestas no grafo
-                    var initRow = ( rowCount == 0 ? 0 : rowCount - 1 );
-                    var initCol = ( colCount == 0 ? 0 : colCount - 1 );
-                    for( var row = initRow; row <= rowCount; row++){
-                        for( var col = initCol ; col <= colCount + 1; col++){
+                    var checkRow = rowCount,
+                        checkCol = colCount - 1;
 
-                            if( isValidPosition( row, col, posTracker ) ){
+                    if( isValidPosition( checkRow, checkCol, posTracker ) ){
+                        var neighboor = posTracker[checkRow][checkCol];
+                        if( isWalkable( neighboor.type ) ){
+                            graph.insertEdge( newObject, neighboor );
+                        }
+                    }
 
-                                var neighboor = posTracker[row][col];
-                                if( isWalkable( neighboor.type ) && neighboor != newObject ){
-                                    graph.insertEdge( newObject, neighboor );
-                                }
+                    checkRow = rowCount - 1,
+                    checkCol = colCount;
 
-                            }
-
+                    if( isValidPosition( checkRow, checkCol, posTracker ) ){
+                        var neighboor = posTracker[checkRow][checkCol];
+                        if( isWalkable( neighboor.type ) ){
+                            graph.insertEdge( newObject, neighboor );
                         }
                     }
                 }
