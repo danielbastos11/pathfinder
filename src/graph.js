@@ -68,7 +68,7 @@ define(
 
 			// Perform insertion
 			this.adjacencyMatrix[vertex1Index][vertex2Index]++;
-			
+
 			if( !this.isDirected ){
 				this.adjacencyMatrix[vertex2Index][vertex1Index]++;
 			}
@@ -92,16 +92,23 @@ define(
 		 * @return {Array} List of vertices adjacent to vertex
 		 */
 		Graph.prototype.getAdjacentsOf = function( vertex ){
-			var vertexIndex = this.vertices.indexOf( vertex );
+			var that = this;
+			var vertexIndex = that.vertices.indexOf( vertex );
 
             if( vertexIndex === -1 )
             {
                 throw new Error('Vertex not existent');
             }
 
-            return this.adjacencyMatrix[vertexIndex].filter(function(element){
-				return ( element > 0 );
+			var adjacents = [];
+
+            that.adjacencyMatrix[vertexIndex].forEach(function(element, index){
+				if( element > 0 ){
+					adjacents.push( that.vertices[index] );
+				};
 			});
+
+			return adjacents;
 		}
 
 		/**
