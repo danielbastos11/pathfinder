@@ -109,6 +109,45 @@ define(
             };
         };
 
+        Renderer.prototype.output = function( array, path ){
+            var output = '';
+
+            array.forEach(function(row){
+                row.forEach(function(col){
+                    var point;
+
+                    switch( col.type ){
+                        case 'path':
+                            point = "0";
+                            break;
+                        case 'wall':
+                            point = '1';
+                            break;
+                        case 'start':
+                            point = '2';
+                            break;
+                        case 'exit':
+                            point = '3';
+                            break;
+                    }
+
+                    if( path.indexOf( col ) != -1 ){
+                        var newPoint = "<span style='color: red'>";
+                        newPoint += point;
+                        newPoint += "</span>";
+
+                        point = newPoint;
+                    }
+
+                    output += point;
+                });
+
+                output += '<br />';
+            });
+
+            return output;
+        };
+
     return new Renderer();
     /*
 1111
