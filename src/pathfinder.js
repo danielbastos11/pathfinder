@@ -19,12 +19,12 @@ define(
             return Math.abs( x1 - x2 ) + Math.abs( y1 - y2 );
         }
 
-        PathFinder.aStar = function( graph, initialSpot ){
+        PathFinder.aStar = function( graph, initialSpot, goal ){
+            console.log( goal );
             // Seta as variáveis
             var frontier = new PriorityQueue( comparator );
             var originOf = {};
             var costTo = {};
-            var goal;
 
             // Seta os valores pro ponto inicial
             originOf[initialSpot] = null;
@@ -44,9 +44,6 @@ define(
                 }
 
                 var adjacents = graph.getAdjacentsOf( current );
-
-                console.log( graph );
-                console.log( current );
 
                 adjacents.forEach(function( next ){
                     var newCost = costTo[current] + graph.cost( current, next );

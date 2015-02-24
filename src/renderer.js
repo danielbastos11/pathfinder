@@ -31,7 +31,7 @@ define(
 
         Renderer.prototype.render = function( grid ){
             var graph = new Graph();
-            var initial;
+            var initial, goal;
 
             var rowCount = 0;
             var colCount = 0;
@@ -72,6 +72,10 @@ define(
                         initial = newObject;
                     }
 
+                    if( type == 'exit' ){
+                        goal = newObject;
+                    }
+
                     // Insere arestas no grafo
                     var initRow = ( rowCount == 0 ? 0 : rowCount - 1 );
                     var initCol = ( colCount == 0 ? 0 : colCount - 1 );
@@ -97,6 +101,7 @@ define(
             return {
                 graph: graph,
                 initial: initial,
+                goal: goal,
                 array: posTracker
             };
         };

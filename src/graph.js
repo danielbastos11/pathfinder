@@ -68,7 +68,7 @@ define(
 
 			// Perform insertion
 			this.adjacencyMatrix[vertex1Index][vertex2Index]++;
-			console.log( vertex1Index +  '/' + vertex2Index);
+			
 			if( !this.isDirected ){
 				this.adjacencyMatrix[vertex2Index][vertex1Index]++;
 			}

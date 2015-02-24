@@ -21,7 +21,9 @@ head.load(
 					$('#go').click(function(){
 						var input = $('#input').val();
 						var maze = Renderer.render( input );
-						var path = PathFinder.aStar( maze.graph, maze.initial);
+
+						console.log( maze.graph );
+						var path = PathFinder.aStar( maze.graph, maze.initial, maze.goal);
 
 						console.log( path );
 					})
