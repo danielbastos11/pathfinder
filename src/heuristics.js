@@ -7,20 +7,17 @@ define(
             var result;
 
             goal.forEach(function( destination ){
-                var x1 = origin.row;
-                var y1 = origin.col;
-                var x2 = destination.row;
-                var y2 = destination.col;
-
-                var candidate =  Math.abs( x1 - x2 ) + Math.abs( y1 - y2 );
+                var colDif = Math.abs( origin.col - destination.col );
+                var rowDif = Math.abs( origin.row - destination.row );
+                var candidate =  colDif + rowDif;
 
                 if( !result ){
                     result = candidate;
                 }
                 else {
-                    result = Math.min( candidate, result );
+                    result = Math.max( candidate, result );
                 }
-            })
+            });
 
             return result;
         };
