@@ -1,7 +1,7 @@
 head.load(
 	[
 		'lib/require.js',
-		'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js',
+		'lib/jquery.js',
 		'lib/flexibleArea.js'
 	],
 	function(){
